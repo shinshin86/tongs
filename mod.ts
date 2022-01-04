@@ -1,7 +1,8 @@
+import { generate } from "./help.ts";
+
 type Config = {
   name: string;
   version: string;
-  help: string;
   main: string;
   subCommand: Command;
 };
@@ -27,6 +28,7 @@ type Argument = {
 
 type OptionalCommand = {
   funcName: string;
+  description?: string;
   options?: Array<Argument>;
 };
 
@@ -49,7 +51,7 @@ class Tongs {
   constructor(config: Config) {
     this.#name = config.name;
     this.#version = config.version;
-    this.#help = config.help;
+    this.#help = generate(config);
     this.#main = config.main;
     this.#subCommand = config.subCommand;
     this.#functions = {};

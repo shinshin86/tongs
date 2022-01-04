@@ -14,26 +14,15 @@ Please note that breaking changes are likely to come in the future.
 // exmaple.ts
 import { init } from "./mod.ts";
 
-const usageText = `USAGE:
-    app <SUBCOMMAND> [OPTIONS]
-  FLAGS:
-    -h, --help, help: Prints help information
-    -v, --version, version: Prints version information
-  SUBCOMMANDS:
-    foo foo command
-    bar bar command (REQUIRED OPTIONS: -t, --text <text>)
-    baz baz command (REQUIRED OPTIONS: -t, --text <text> && -n --number <number>)`;
-
-// tongs setting
 const tongSetting = {
   name: "app",
   version: "1.0.0",
-  help: usageText, // Help text is here
   main: "main", // The function foo will be called
   subCommand: {
     foo: "foo", // The function foo will be called
     bar: {
       funcName: "bar", // The function bar will be called
+      description: "bar command",
       options: [
         {
           args: ["-t", "--text"],
@@ -43,6 +32,7 @@ const tongSetting = {
     },
     baz: {
       funcName: "baz", // The function baz will be called
+      description: "baz command",
       options: [
         {
           args: ["-t", "--text"],
@@ -94,7 +84,7 @@ deno run example.ts
 
 # help
 deno run example.ts -h # or --help or help
-# => help
+# => help (The help will be generated automatically.)
 
 # version
 deno run example.ts -v # or --version or version
