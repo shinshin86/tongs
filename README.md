@@ -12,7 +12,7 @@ Please note that breaking changes are likely to come in the future.
 
 ```typescript
 // exmaple.ts
-import { init } from "./mod.ts";
+import { init } from "https://deno.land/x/tongs@v0.0.1/mod.ts";
 
 const tongSetting = {
   name: "app",
@@ -117,7 +117,9 @@ deno run example.ts baz -t testvalue
 ```
 
 ## Licence
+
 [MIT](https://github.com/shinshin86/tongs/blob/main/LICENSE)
 
 ## Author
+
 [Yuki Shindo](https://shinshin86.com/en)
