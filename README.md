@@ -115,3 +115,9 @@ deno run example.ts baz -t testvalue -n 123
 deno run example.ts baz -t testvalue
 # => throw error
 ```
+
+## Licence
+[MIT](https://github.com/shinshin86/tongs/blob/main/LICENSE)
+
+## Author
+[Yuki Shindo](https://shinshin86.com/en)
