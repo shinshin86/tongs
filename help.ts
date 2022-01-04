@@ -1,27 +1,4 @@
-type Setting = {
-  name: string;
-  version: string;
-  main: string;
-  subCommand?: {
-    [keyof in string]: string | OptionalCommand;
-  };
-};
-
-type OptionParam = {
-  name: string;
-  required: boolean;
-};
-
-type Argument = {
-  args: Array<string>;
-  param: OptionParam;
-};
-
-type OptionalCommand = {
-  funcName: string;
-  description?: string;
-  options?: Array<Argument>;
-};
+import { Setting } from "./types.ts";
 
 export function generate(setting: Setting): string {
   const hasSubCommand = setting.subCommand &&

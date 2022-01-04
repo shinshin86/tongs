@@ -1,40 +1,5 @@
+import { Command, CommandOption, Config, FuncObj } from "./types.ts";
 import { generate } from "./help.ts";
-
-type Config = {
-  name: string;
-  version: string;
-  main: string;
-  subCommand: Command;
-};
-
-type CommandOption = {
-  key: string;
-  value: string;
-};
-
-type Command = {
-  [keyof in string]: string | OptionalCommand;
-};
-
-type OptionParam = {
-  name: string;
-  required: boolean;
-};
-
-type Argument = {
-  args: Array<string>;
-  param: OptionParam;
-};
-
-type OptionalCommand = {
-  funcName: string;
-  description?: string;
-  options?: Array<Argument>;
-};
-
-type FuncObj = {
-  [keyof in string]: Function;
-};
 
 export function init(config: Config) {
   return new Tongs(config);
