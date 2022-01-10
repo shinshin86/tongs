@@ -105,10 +105,6 @@ class Tongs {
     return result;
   }
 
-  #getArgumentValue(values: Array<string>, index: number): string | undefined {
-    return values.length >= (index + 1) ? values[index] : undefined;
-  }
-
   execute(args: any) {
     if (["-h", "--help", "help"].includes(args[0])) {
       console.log(this.#help);
@@ -137,14 +133,7 @@ class Tongs {
       }
 
       const values = commandOptions.map(({ value }) => value);
-
-      // TODO: Here we need to process the arguments dynamically.
-      func(
-        this.#getArgumentValue(values, 0),
-        this.#getArgumentValue(values, 1),
-        this.#getArgumentValue(values, 2),
-        this.#getArgumentValue(values, 3),
-      );
+      func(...values);
     } else {
       this.#getMainFunction()();
     }
