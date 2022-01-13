@@ -116,6 +116,12 @@ deno run example.ts baz -t testvalue
 # => throw error
 ```
 
+## test
+
+```sh
+deno test --allow-run
+```
+
 ## Licence
 
 [MIT](https://github.com/shinshin86/tongs/blob/main/LICENSE)
