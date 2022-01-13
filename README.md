@@ -1,4 +1,5 @@
 # Tongs
+[![Deno CI](https://github.com/shinshin86/tongs/actions/workflows/main.yml/badge.svg)](https://github.com/shinshin86/tongs/actions/workflows/main.yml)
 
 A lightweight and simple command line parser for Deno.\
 It is mainly used to create CLI tools with subcommands.
