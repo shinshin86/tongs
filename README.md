@@ -23,7 +23,7 @@ const tongSetting = {
   subCommand: {
     foo: "foo", // The function foo will be called
     bar: {
-      funcName: "bar", // The function bar will be called
+      func: "bar", // The function bar will be called
       description: "bar command",
       options: [
         {
@@ -33,7 +33,7 @@ const tongSetting = {
       ],
     },
     baz: {
-      funcName: "baz", // The function baz will be called
+      func: "baz", // The function baz will be called
       description: "baz command",
       options: [
         {

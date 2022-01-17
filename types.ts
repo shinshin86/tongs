@@ -38,7 +38,7 @@ type Argument = {
 };
 
 type OptionalCommand = {
-  funcName: string;
+  func: string;
   description?: string;
   options?: Array<Argument>;
 };
