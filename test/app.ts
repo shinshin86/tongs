@@ -4,12 +4,12 @@ import { init } from "../mod.ts";
 const tongSetting = {
   name: "app",
   version: "1.0.0",
-  main: "main", // The function foo will be called
+  main: "main",
   subCommand: {
-    foo: "foo", // The function foo will be called
-    bar: {
-      func: "bar", // The function bar will be called
-      description: "bar command",
+    foo: "foo",
+    funcRequiredArgument1: {
+      func: "funcRequiredArgument1",
+      description: "Functions with required arguments 1",
       options: [
         {
           args: ["-t", "--text"],
@@ -17,9 +17,9 @@ const tongSetting = {
         },
       ],
     },
-    baz: {
-      func: "baz", // The function baz will be called
-      description: "baz command",
+    funcRequiredArgument2: {
+      func: "funcRequiredArgument2",
+      description: "Functions with required arguments 2",
       options: [
         {
           args: ["-t", "--text"],
@@ -32,7 +32,7 @@ const tongSetting = {
       ],
     },
     funcOptionalArgument1: {
-      func: "bar", // The function baz will be called
+      func: "funcOptionalArgument1",
       description: "Functions with optional arguments",
       options: [
         {
@@ -56,20 +56,27 @@ tongs.setFunc({ main });
 function foo() {
   console.log("foo");
 }
+
 tongs.setFunc({ foo });
 
-function bar(text: string | undefined) {
+function funcRequiredArgument1(text: string) {
+  console.log(`funcRequiredArgument1: ${text}`);
+}
+
+tongs.setFunc({ funcRequiredArgument1 });
+
+function funcRequiredArgument2(text: string, num: number) {
+  console.log(`funcRequiredArgument2: ${text} & ${num}`);
+}
+
+tongs.setFunc({ funcRequiredArgument2 });
+
+function funcOptionalArgument1(text: string | undefined) {
   const value = text || "default value";
-  console.log(`bar: ${value}`);
+  console.log(`funcOptionalArgument1: ${value}`);
 }
-tongs.setFunc({ bar });
 
-function baz(text: string, num: number) {
-  console.log(`baz: ${text} & ${num}`);
-}
-tongs.setFunc({ baz });
-
-tongs.setFunc({ funcOptionalArgument1: bar });
+tongs.setFunc({ funcOptionalArgument1 });
 
 // run
 tongs.execute(Deno.args);

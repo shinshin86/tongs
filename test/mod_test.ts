@@ -21,8 +21,8 @@ OPTIONS:
 
 SUBCOMMANDS
   foo
-  bar: bar command (REQUIRED OPTIONS: -t, --text: text)
-  baz: baz command (REQUIRED OPTIONS: -t, --text: text && -n, --number: num)
+  funcRequiredArgument1: Functions with required arguments 1 (REQUIRED OPTIONS: -t, --text: text)
+  funcRequiredArgument2: Functions with required arguments 2 (REQUIRED OPTIONS: -t, --text: text && -n, --number: num)
   funcOptionalArgument1: Functions with optional arguments (-t, --text: text)`;
 
 Deno.test({
@@ -199,9 +199,9 @@ Deno.test({
 });
 
 Deno.test({
-  name: "tongs[Shell execution test]: bar",
+  name: "tongs[Shell execution test]: funcRequiredArgument1",
   fn: async () => {
-    const cmd = basicCmd.concat("bar");
+    const cmd = basicCmd.concat("funcRequiredArgument1");
 
     const p = Deno.run({
       cmd,
@@ -220,9 +220,9 @@ Deno.test({
 });
 
 Deno.test({
-  name: "tongs[Shell execution test]: bar -t testvalue",
+  name: "tongs[Shell execution test]: funcRequiredArgument1 -t testvalue",
   fn: async () => {
-    const cmd = basicCmd.concat(["bar", "-t", "testvalue"]);
+    const cmd = basicCmd.concat(["funcRequiredArgument1", "-t", "testvalue"]);
 
     const p = Deno.run({
       cmd,
@@ -235,16 +235,16 @@ Deno.test({
     const rawOutput = await p.output();
     const stdoutResult = getStdoutResult(rawOutput);
 
-    assertEquals(stdoutResult, "bar: testvalue");
+    assertEquals(stdoutResult, "funcRequiredArgument1: testvalue");
 
     await p.close();
   },
 });
 
 Deno.test({
-  name: "tongs[Shell execution test]: bar -n 123",
+  name: "tongs[Shell execution test]: funcRequiredArgument1 -n 123",
   fn: async () => {
-    const cmd = basicCmd.concat(["bar", "-n", "123"]);
+    const cmd = basicCmd.concat(["funcRequiredArgument1", "-n", "123"]);
 
     const p = Deno.run({
       cmd,
@@ -263,9 +263,16 @@ Deno.test({
 });
 
 Deno.test({
-  name: "tongs[Shell execution test]: baz -t testvalue -n 123",
+  name:
+    "tongs[Shell execution test]: funcRequiredArgument2 -t testvalue -n 123",
   fn: async () => {
-    const cmd = basicCmd.concat(["baz", "-t", "testvalue", "-n", "123"]);
+    const cmd = basicCmd.concat([
+      "funcRequiredArgument2",
+      "-t",
+      "testvalue",
+      "-n",
+      "123",
+    ]);
 
     const p = Deno.run({
       cmd,
@@ -278,16 +285,16 @@ Deno.test({
     const rawOutput = await p.output();
     const stdoutResult = getStdoutResult(rawOutput);
 
-    assertEquals(stdoutResult, "baz: testvalue & 123");
+    assertEquals(stdoutResult, "funcRequiredArgument2: testvalue & 123");
 
     await p.close();
   },
 });
 
 Deno.test({
-  name: "tongs[Shell execution test]: baz",
+  name: "tongs[Shell execution test]: funcRequiredArgument2",
   fn: async () => {
-    const cmd = basicCmd.concat("baz");
+    const cmd = basicCmd.concat("funcRequiredArgument2");
 
     const p = Deno.run({
       cmd,
@@ -306,9 +313,9 @@ Deno.test({
 });
 
 Deno.test({
-  name: "tongs[Shell execution test]: baz -t testvalue",
+  name: "tongs[Shell execution test]: funcRequiredArgument2 -t testvalue",
   fn: async () => {
-    const cmd = basicCmd.concat(["baz", "-t", "testvalue"]);
+    const cmd = basicCmd.concat(["funcRequiredArgument2", "-t", "testvalue"]);
 
     const p = Deno.run({
       cmd,
@@ -327,9 +334,9 @@ Deno.test({
 });
 
 Deno.test({
-  name: "tongs[Shell execution test]: baz -n 123",
+  name: "tongs[Shell execution test]: funcRequiredArgument2 -n 123",
   fn: async () => {
-    const cmd = basicCmd.concat(["baz", "-n", "123"]);
+    const cmd = basicCmd.concat(["funcRequiredArgument2", "-n", "123"]);
 
     const p = Deno.run({
       cmd,
@@ -363,7 +370,7 @@ Deno.test({
     const rawOutput = await p.output();
     const stdoutResult = getStdoutResult(rawOutput);
 
-    assertEquals(stdoutResult, "bar: default value");
+    assertEquals(stdoutResult, "funcOptionalArgument1: default value");
 
     await p.close();
   },
