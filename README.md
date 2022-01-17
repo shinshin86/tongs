@@ -108,7 +108,6 @@ tongs.execute(Deno.args);
 Run cli app.
 
 ```sh
-# main
 deno run app.ts
 # => main
 
