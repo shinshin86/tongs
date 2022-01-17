@@ -13,18 +13,18 @@ Please note that breaking changes are likely to come in the future.
 ## Usage
 
 ```typescript
-// exmaple.ts
-import { init } from "https://deno.land/x/tongs@v0.0.1/mod.ts";
+// app.ts
+import { init } from "https://deno.land/x/tongs@v0.0.4/mod.ts";
 
 const tongSetting = {
   name: "app",
   version: "1.0.0",
-  main: "main", // The function foo will be called
+  main: "main",
   subCommand: {
-    foo: "foo", // The function foo will be called
-    bar: {
-      func: "bar", // The function bar will be called
-      description: "bar command",
+    foo: "foo",
+    funcRequiredArgument1: {
+      func: "funcRequiredArgument1",
+      description: "Functions with required arguments 1",
       options: [
         {
           args: ["-t", "--text"],
@@ -32,9 +32,9 @@ const tongSetting = {
         },
       ],
     },
-    baz: {
-      func: "baz", // The function baz will be called
-      description: "baz command",
+    funcRequiredArgument2: {
+      func: "funcRequiredArgument2",
+      description: "Functions with required arguments 2",
       options: [
         {
           args: ["-t", "--text"],
@@ -46,6 +46,21 @@ const tongSetting = {
         },
       ],
     },
+    funcOptionalArgument1: {
+      func: "funcOptionalArgument1",
+      description: "Functions with optional arguments",
+      options: [
+        {
+          args: ["-t", "--text"],
+          param: { name: "text", required: false },
+        },
+      ],
+    },
+    bar: {
+      func: "funcOptionalArgument1",
+      description:
+        "The actual name is funcOptionalArgument1, but the subcommand name is different",
+    },
   },
 };
 
@@ -55,23 +70,36 @@ const tongs = init(tongSetting);
 function main() {
   console.log("main");
 }
+
 tongs.setFunc({ main });
 
 function foo() {
   console.log("foo");
 }
+
 tongs.setFunc({ foo });
 
-function bar(text: string | undefined) {
-  const value = text || "default value";
-  console.log(`bar: ${value}`);
+function funcRequiredArgument1(text: string) {
+  console.log(`funcRequiredArgument1: ${text}`);
 }
-tongs.setFunc({ bar });
 
-function baz(text: string, num: number) {
-  console.log(`baz: ${text} & ${num}`);
+tongs.setFunc({ funcRequiredArgument1 });
+
+function funcRequiredArgument2(text: string, num: number) {
+  console.log(`funcRequiredArgument2: ${text} & ${num}`);
 }
-tongs.setFunc({ baz });
+
+tongs.setFunc({ funcRequiredArgument2 });
+
+function funcOptionalArgument1(text: string | undefined) {
+  const value = text || "default value";
+  console.log(`funcOptionalArgument1: ${value}`);
+}
+
+tongs.setFunc({ funcOptionalArgument1 });
+
+// The actual name is funcOptionalArgument1, but the subcommand name is different.
+tongs.setFunc({ bar: funcOptionalArgument1 });
 
 // run
 tongs.execute(Deno.args);
@@ -81,40 +109,74 @@ Run cli app.
 
 ```sh
 # main
-deno run example.ts
+deno run app.ts
 # => main
 
-# help
-deno run example.ts -h # or --help or help
-# => help (The help will be generated automatically.)
+deno run app.ts -h
+deno run app.ts --help
+deno run app.ts help
 
-# version
-deno run example.ts -v # or --version or version
-# => version
+#app: 1.0.0
+#
+#USAGE:
+#  app [OPTIONS] [SUBCOMMAND]
 
-# foo
-deno run example.ts foo
+#OPTIONS:
+#  -h, --help help  Prints help information
+#  -v, --version version  Prints version information
+
+#SUBCOMMANDS
+#  foo
+#  funcRequiredArgument1: Functions with required arguments 1 (REQUIRED OPTIONS: -t, --text: text)
+#  funcRequiredArgument2: Functions with required arguments 2 (REQUIRED OPTIONS: -t, --text: text && -n, --number: num)
+#  funcOptionalArgument1: Functions with optional arguments (-t, --text: text)
+#  bar: The actual name is funcOptionalArgument1, but the subcommand name is different
+
+deno run app.ts -v
+deno run app.ts --version
+deno run app.ts version
+# => app: 1.0.0
+
+deno run app.ts foo
 # => foo
 
-# bar 
-deno run example.ts bar
+deno run app.ts funcRequiredArgument1
 # => throw error
 
-# bar -t <text>
-deno run example.ts bar -t testvalue # --text testvalue
-# => bar: testvalue
+deno run app.ts funcRequiredArgument1 -t testvalue
+# => funcRequiredArgument1: testvalue
 
-# bar -n <number>
-deno run example.ts bar -n 123 # --number 123
+deno run app.ts funcRequiredArgument1 -n 123
 # => throw error
 
-# baz -t <text> -n <number>
-deno run example.ts baz -t testvalue -n 123
-# or: deno run example.ts baz --text testvalue --number 123
-# => baz: testvalue & 123
+deno run app.ts funcRequiredArgument2 -t testvalue -n 123
+# => funcRequiredArgument2: testvalue & 123
 
-# baz -t <text> => error
-deno run example.ts baz -t testvalue
+deno run app.ts funcRequiredArgument2
+# => throw error
+
+deno run app.ts funcRequiredArgument2 -t testvalue
+# => throw error
+
+deno run app.ts funcRequiredArgument2 -n 123
+# => throw error
+
+deno run app.ts funcOptionalArgument1
+# => funcOptionalArgument1: default value
+
+deno run app.ts funcOptionalArgument1 -t testvalue
+# => funcOptionalArgument1: testvalue
+
+deno run app.ts funcOptionalArgument1 -n 123
+# => throw error
+
+deno run app.ts bar
+# => funcOptionalArgument1: default value
+
+deno run app.ts bar -t testvalue
+# => throw error
+
+deno run app.ts bar -n 123
 # => throw error
 ```
 
