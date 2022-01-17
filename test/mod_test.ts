@@ -21,9 +21,9 @@ OPTIONS:
 
 SUBCOMMANDS
   foo
-  bar bar command (REQUIRED OPTIONS: -t, --text: text)
-  baz baz command (REQUIRED OPTIONS: -t, --text: text && -n, --number: num)
-  funcOptionalArgument1 Functions with optional arguments (-t, --text: text)`;
+  bar: bar command (REQUIRED OPTIONS: -t, --text: text)
+  baz: baz command (REQUIRED OPTIONS: -t, --text: text && -n, --number: num)
+  funcOptionalArgument1: Functions with optional arguments (-t, --text: text)`;
 
 Deno.test({
   name: "tongs[Shell execution test]: main",

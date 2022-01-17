@@ -25,7 +25,7 @@ SUBCOMMANDS`;
   ${command}`;
       } else {
         usageText += `
-  ${command} ${subCmd.description}`;
+  ${command}: ${subCmd.description}`;
 
         if (!!subCmd.options?.length) {
           let isRequired = false;
