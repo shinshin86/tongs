@@ -22,10 +22,10 @@ SUBCOMMANDS`;
       const subCmd = setting.subCommand[command];
       if (typeof subCmd === "string") {
         usageText += `
-  ${subCmd}`;
+  ${command}`;
       } else {
         usageText += `
-  ${subCmd.funcName} ${subCmd.description}`;
+  ${command} ${subCmd.description}`;
 
         if (!!subCmd.options?.length) {
           let isRequired = false;
