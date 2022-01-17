@@ -53,20 +53,34 @@ class Tongs {
     options: Array<CommandOption>,
   ): boolean {
     const func = this.#subCommand[subCmd];
+
     if (typeof func === "string") {
       return false;
     }
 
-    // If not has option, no check
-    if (!func.options) {
+    const argKeys = options.map(({ key }) => key);
+
+    if (!func.options && argKeys.length > 0) {
+      return false;
+    } else if (!func.options) {
       return true;
     }
 
-    const optionKeys = options.map(({ key }) => key);
+    const optionKeys = func.options.map((option) => option.args).flat();
     const requiredKeys = func.options.filter((option) => option.param.required)
       .map((option) => option.args).flat();
 
-    const hasKey = optionKeys.find((key) => requiredKeys.includes(key));
+    const matchKeys = argKeys.filter((key) => optionKeys.includes(key));
+
+    if (argKeys.length !== matchKeys.length) {
+      return false;
+    }
+
+    if (requiredKeys.length === 0) {
+      return true;
+    }
+
+    const hasKey = argKeys.find((key) => requiredKeys.includes(key));
     if (!hasKey) return false;
 
     const optionValues = options.map(({ value }) => value);
@@ -129,6 +143,7 @@ class Tongs {
     }
 
     const commandOptions = this.#getOptionParams(args);
+
     if (subCmd) {
       const func = this.#getFunction(subCmd);
 
