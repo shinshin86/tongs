@@ -98,7 +98,7 @@ deno run example.ts foo
 
 # bar 
 deno run example.ts bar
-# => bar: default value
+# => throw error
 
 # bar -t <text>
 deno run example.ts bar -t testvalue # --text testvalue

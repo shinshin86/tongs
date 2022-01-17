@@ -80,6 +80,7 @@ class Tongs {
 
     let keys = [];
     let values = [];
+
     // TODO: Process to check if it is an optional argument.
     for (const [index, arg] of args.entries()) {
       if (index === 0) continue;
@@ -117,12 +118,21 @@ class Tongs {
     }
 
     const subCmd: string = args.find((a: string) => this.#functions[a]);
+    const subCommand = this.#subCommand[subCmd];
+
+    let hasRequiredOption = false;
+    if (subCommand && typeof subCommand === "object") {
+      const requiredOptions = subCommand?.options?.filter(({ param }) =>
+        param.required
+      );
+      hasRequiredOption = !!requiredOptions?.length;
+    }
 
     const commandOptions = this.#getOptionParams(args);
     if (subCmd) {
       const func = this.#getFunction(subCmd);
 
-      if (!!commandOptions.length) {
+      if (!!commandOptions.length || hasRequiredOption) {
         const isValid = this.#optionValidate(
           subCmd,
           commandOptions,
