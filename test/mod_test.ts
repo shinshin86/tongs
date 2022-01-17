@@ -22,7 +22,8 @@ OPTIONS:
 SUBCOMMANDS
   foo
   bar bar command (REQUIRED OPTIONS: -t, --text: text)
-  baz baz command (REQUIRED OPTIONS: -t, --text: text && -n, --number: num)`;
+  baz baz command (REQUIRED OPTIONS: -t, --text: text && -n, --number: num)
+  funcOptionalArgument1 Functions with optional arguments (-t, --text: text)`;
 
 Deno.test({
   name: "tongs[Shell execution test]: main",
@@ -342,6 +343,28 @@ Deno.test({
     const stdoutResult = getStdoutResult(rawError);
 
     assert(stdoutResult.includes("Uncaught Error: Invalid argument"));
+    await p.close();
+  },
+});
+
+Deno.test({
+  name: "tongs[Shell execution test]: funcOptionalArgument1",
+  fn: async () => {
+    const cmd = basicCmd.concat("funcOptionalArgument1");
+
+    const p = Deno.run({
+      cmd,
+      stdout: "piped",
+    });
+
+    const { code } = await p.status();
+    assertEquals(code, 0);
+
+    const rawOutput = await p.output();
+    const stdoutResult = getStdoutResult(rawOutput);
+
+    assertEquals(stdoutResult, "bar: default value");
+
     await p.close();
   },
 });

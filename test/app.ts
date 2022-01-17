@@ -31,6 +31,16 @@ const tongSetting = {
         },
       ],
     },
+    funcOptionalArgument1: {
+      funcName: "bar", // The function baz will be called
+      description: "Functions with optional arguments",
+      options: [
+        {
+          args: ["-t", "--text"],
+          param: { name: "text", required: false },
+        },
+      ],
+    },
   },
 };
 
@@ -58,6 +68,8 @@ function baz(text: string, num: number) {
   console.log(`baz: ${text} & ${num}`);
 }
 tongs.setFunc({ baz });
+
+tongs.setFunc({ funcOptionalArgument1: bar });
 
 // run
 tongs.execute(Deno.args);
