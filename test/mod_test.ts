@@ -23,7 +23,8 @@ SUBCOMMANDS
   foo
   funcRequiredArgument1: Functions with required arguments 1 (REQUIRED OPTIONS: -t, --text: text)
   funcRequiredArgument2: Functions with required arguments 2 (REQUIRED OPTIONS: -t, --text: text && -n, --number: num)
-  funcOptionalArgument1: Functions with optional arguments (-t, --text: text)`;
+  funcOptionalArgument1: Functions with optional arguments (-t, --text: text)
+  bar: The actual name is funcOptionalArgument1, but the subcommand name is different`;
 
 Deno.test({
   name: "tongs[Shell execution test]: main",
@@ -372,6 +373,113 @@ Deno.test({
 
     assertEquals(stdoutResult, "funcOptionalArgument1: default value");
 
+    await p.close();
+  },
+});
+
+Deno.test({
+  name: "tongs[Shell execution test]: funcOptionalArgument1 -t testvalue",
+  fn: async () => {
+    const cmd = basicCmd.concat(["funcOptionalArgument1", "-t", "testvalue"]);
+
+    const p = Deno.run({
+      cmd,
+      stdout: "piped",
+    });
+
+    const { code } = await p.status();
+    assertEquals(code, 0);
+
+    const rawOutput = await p.output();
+    const stdoutResult = getStdoutResult(rawOutput);
+
+    assertEquals(stdoutResult, "funcOptionalArgument1: testvalue");
+
+    await p.close();
+  },
+});
+
+Deno.test({
+  name: "tongs[Shell execution test]: funcOptionalArgument1 -n 123",
+  fn: async () => {
+    const cmd = basicCmd.concat(["funcOptionalArgument1", "-n", "123"]);
+
+    const p = Deno.run({
+      cmd,
+      stderr: "piped",
+    });
+
+    const { code } = await p.status();
+    assertEquals(code, 1);
+
+    const rawError = await p.stderrOutput();
+    const stdoutResult = getStdoutResult(rawError);
+
+    assert(stdoutResult.includes("Uncaught Error: Invalid argument"));
+    await p.close();
+  },
+});
+
+Deno.test({
+  name: "tongs[Shell execution test]: bar",
+  fn: async () => {
+    const cmd = basicCmd.concat("bar");
+
+    const p = Deno.run({
+      cmd,
+      stdout: "piped",
+    });
+
+    const { code } = await p.status();
+    assertEquals(code, 0);
+
+    const rawOutput = await p.output();
+    const stdoutResult = getStdoutResult(rawOutput);
+
+    assertEquals(stdoutResult, "funcOptionalArgument1: default value");
+
+    await p.close();
+  },
+});
+
+Deno.test({
+  name: "tongs[Shell execution test]: bar -t testvalue",
+  fn: async () => {
+    const cmd = basicCmd.concat(["bar", "-t", "testvalue"]);
+
+    const p = Deno.run({
+      cmd,
+      stderr: "piped",
+    });
+
+    const { code } = await p.status();
+    assertEquals(code, 1);
+
+    const rawError = await p.stderrOutput();
+    const stdoutResult = getStdoutResult(rawError);
+
+    assert(stdoutResult.includes("Uncaught Error: Invalid argument"));
+    await p.close();
+  },
+});
+
+Deno.test({
+  name: "tongs[Shell execution test]: bar -n 123",
+  fn: async () => {
+    const cmd = basicCmd.concat(["bar", "-n", "123"]);
+
+    const p = Deno.run({
+      cmd,
+      stderr: "piped",
+    });
+
+    const { code } = await p.status();
+    assertEquals(code, 1);
+
+    const rawError = await p.stderrOutput();
+    const stdoutResult = getStdoutResult(rawError);
+
+    assert(stdoutResult.includes("Uncaught Error: Invalid argument"));
     await p.close();
   },
 });

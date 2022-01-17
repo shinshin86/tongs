@@ -41,6 +41,11 @@ const tongSetting = {
         },
       ],
     },
+    bar: {
+      func: "funcOptionalArgument1",
+      description:
+        "The actual name is funcOptionalArgument1, but the subcommand name is different",
+    },
   },
 };
 
@@ -77,6 +82,9 @@ function funcOptionalArgument1(text: string | undefined) {
 }
 
 tongs.setFunc({ funcOptionalArgument1 });
+
+// The actual name is funcOptionalArgument1, but the subcommand name is different.
+tongs.setFunc({ bar: funcOptionalArgument1 });
 
 // run
 tongs.execute(Deno.args);
